@@ -1,0 +1,223 @@
+{% extends 'main.html' %}
+{% block content %}
+
+        
+    <!-- Topbar Start -->
+    <div class="container-fluid">
+        <div class="row align-items-center py-3 px-xl-5">
+            <div class="col-lg-3 d-none d-lg-block">
+                <a href="" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">K</span>Shop</h1>
+                </a>
+            </div>
+            <div class="col-lg-6 col-6">
+                
+            </div>
+            <div class="col-lg-3 col-6 text-right">
+                <a href="/cart" class="btn border">
+                    <i class="fas fa-shopping-cart text-primary"></i>
+                    <span class="badge">{{cartItems}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+    
+    <!-- Navbar Start -->
+    <div class="container-fluid">
+        <div class="row border-top px-xl-5">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
+                    <a href="" class="text-decoration-none d-block d-lg-none">
+                        <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="/" class="nav-item nav-link ">Home</a>
+                            <a href="/cart" class="nav-item nav-link ">Shopping Cart</a>
+                            <a href="/checkout" class="nav-item nav-link active">Checkout</a>
+                        </div>
+                        
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Checkout</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Checkout</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Checkout Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <div class="mb-4">
+                    <h4 class="font-weight-semi-bold mb-4">Shipping Info</h4>
+                    <form id="form" method="post">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Name</label>
+                                <input class="form-control" id ="na" name="name" type="text" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>E-mail</label>
+                                <input class="form-control" id="email" name="email" type="email" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Mobile Number</label>
+                                <input class="form-control" id="mobile" name="mobile" type="text" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Address</label>
+                                <input class="form-control" id="address" name="address" type="text" required>
+                            </div>
+                            
+                            <div class="col-md-6 form-group">
+                                <label>City</label>
+                                <select class="custom-select" id="city" name="city">
+                                    <option value="Qussier">Qussier</option>
+                                </select>
+                            </div> 
+                            <div class="col-md-6 form-group">
+                                <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" id="checkout">CHECKOUT</button> 
+                            </div> 
+                        </div>
+                    <form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="font-weight-medium mb-3">Products</h5>
+                        {% for item in items %}
+                        <div class="d-flex justify-content-between">
+                            <p>{{item.product.name}}</p>
+                            <p>${{item.product.price}}</p>
+                        </div>
+                        {% endfor %}                    
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">${{order.get_cart_total}}</h5>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                    
+               
+            </div>
+        </div>
+    </div>
+    <!-- Checkout End -->
+
+
+    <script type="text/javascript">
+        var total = '{{order.get_cart_total}}'
+
+		{% comment %} if (user != 'AnonymousUser'){
+		 	document.getElementById('user-info').innerHTML = ''
+		 } {% endcomment %}
+
+		//var form = document.getElementById('form')
+
+		
+	    document.getElementById('checkout').addEventListener('click', function(e){
+	    	submitFormData()
+	    })
+	    
+
+	    function submitFormData(){
+	    	//console.log('Submmited')
+
+	    	var userFormData = {
+				'name':null,
+				'email':null,
+				'total':total,
+			}
+
+			var shippingInfo = {
+                'mobile':null,
+				'address':null,
+				'city':null,
+			}
+            
+            na = document.getElementById("na");
+            email = document.getElementById("email");
+            city = document.getElementById("city");
+            address = document.getElementById("address");
+            mobile = document.getElementById("mobile");
+
+			if(na.value =="" || email.value =="" || address.value == "" || city.value == "" || mobile.value =="" ){
+                
+                alert("Complete all shopping information")
+                
+            }
+            else if(mobile.value.length != 11){
+                alert("Mobile number must be 11 numbers")
+            }
+
+            else if(total == 0){
+                alert("Shopping Cart Empty")
+            }
+            
+            else{
+                shippingInfo.address = address.value
+                shippingInfo.city = city.value
+                shippingInfo.mobile = mobile.value
+                
+                
+
+                // if (user == 'AnonymousUser'){
+                userFormData.name = na.value
+                userFormData.email = email.value
+
+                //console.log('Shipping Info:', shippingInfo)
+                //console.log('User Info:', userFormData)
+            
+                var url = "/process_order/"
+                fetch(url, {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'applicaiton/json',
+                        'X-CSRFToken':csrftoken,
+                    }, 
+                    body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
+                    
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Success:', data);
+                    alert('Transaction completed');  
+
+                    cart = {}
+                    document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+                    window.location.href = "{% url 'store' %}"
+                })
+            }
+
+	    }
+	</script>
+{% endblock content %}
